@@ -1,0 +1,28 @@
+## Installing phpMyAdmin ##
+ 
+# Disabling MySql Validate Password Plugin
+mysql>UNINSTALL COMPONENT "file://component_validate_password";
+mysql>exit;
+ 
+# Installing phpMyAdmin
+sudo apt update && apt install phpmyadmin php-mbstring php-zip php-gd php-json php-curl
+ 
+# Creating a MySql dedicated user for phpmyadmin
+mysql>CREATE USER 'toor'@'localhost' IDENTIFIED WITH caching_sha2_password BY 'toorpass123=';
+# or using mysql_native_password (backward compatible)
+mysql>CREATE USER 'toor1'@'localhost' IDENTIFIED WITH mysql_native_password BY 'toorpass123=';
+mysql>GRANT ALL PRIVILEGES ON *.* TO 'toor'@'localhost' WITH GRANT OPTION;
+ 
+phpMyAdmin is accessed at https://server_ip_or_domain/phpmyadmin
+ 
+Any change made to phpMyAdmin will be done by editing /etc/phpmyadmin/apache.conf
+ 
+# Change the phpMyAdmin URL:
+a) Open /etc/phpmyadmin/apache.conf
+b) Change the Alias directive: 
+    Alias   /NEW_NAME  /usr/share/phpmyadmin 
+It will be accessed at https://server_ip_or_domain/NEW_NAME
+ 
+To limit access to phpMyAdmin by source IP (host) or to add HTTP Authentication add the
+Apache directives that protect /usr/share/phpmyadmin in 
+a <Directory> ... </Directory> section (in /etc/phpmyadmin/apache2) or in .htaccess (in /usr/share/phpmyadmin)
